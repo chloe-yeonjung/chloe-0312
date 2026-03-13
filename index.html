@@ -163,7 +163,7 @@
       cursor: pointer; transition: all .15s;
     }
     .subj-card:hover { border-color: #bbb; background: #f4f4f6; }
-    .subj-card.sel-english { border-color: #5b4fcf; background: #f0eeff; }
+    .subj-card.sel-english { border-color: #F0569A; background: #fde8f3; }
     .subj-card.sel-math    { border-color: #3a9de1; background: #e8f4fd; }
     .subj-card.sel-hangul  { border-color: #2bb5a0; background: #e5f8f5; }
 
@@ -173,7 +173,7 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 12px; transition: all .15s;
     }
-    .sel-english .subj-chk { background: #5b4fcf; border-color: #5b4fcf; color: #fff; }
+    .sel-english .subj-chk { background: #F0569A; border-color: #F0569A; color: #fff; }
     .sel-math    .subj-chk { background: #3a9de1; border-color: #3a9de1; color: #fff; }
     .sel-hangul  .subj-chk { background: #2bb5a0; border-color: #2bb5a0; color: #fff; }
 
@@ -323,7 +323,7 @@
     .th-child  { background: #555; text-align: center; width: 80px; }
     .th-period { background: #666; width: 76px; }
     .th-item   { background: #777; width: 110px; text-align: left; }
-    .th-english { background: #5b4fcf; }
+    .th-english { background: #F0569A; }
     .th-math    { background: #3a9de1; }
     .th-hangul  { background: #2bb5a0; }
 
@@ -339,7 +339,7 @@
     .td-welcome  { font-weight: 700; color: #c0392b; }
     .td-monthly  { font-weight: 800; color: #2c7be5; font-size: 14px; }
     .td-empty    { color: #ddd; font-size: 12px; }
-    .col-english { border-right: 1px solid #e8e4f9; }
+    .col-english { border-right: 1px solid #fad0e8; }
     .col-math    { border-right: 1px solid #daeef9; }
 
     tr.row-monthly td { background: #f7fbff; }
@@ -481,7 +481,7 @@
                 <div class="subj-name">토도영어</div>
                 <div class="subj-desc">모국어처럼 습득하는 즐거운 영어</div>
               </div>
-              <span class="subj-badge" style="background:#5b4fcf;">영어</span>
+              <span class="subj-badge" style="background:#F0569A;">영어</span>
             </div>
             <div class="subj-card" id="sc-math" onclick="toggleSubj('math')">
               <div class="subj-chk" id="chk-math"></div>
@@ -705,7 +705,7 @@
     /* ── 가격 데이터 ── */
     const DATA = {
       english: {
-        name: '토도영어', color: '#5b4fcf', light: '#f0eeff',
+        name: '토도영어', color: '#F0569A', light: '#fde8f3',
         hasSix: true,
         p: {
           1: {
