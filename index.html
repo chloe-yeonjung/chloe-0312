@@ -112,11 +112,11 @@
     .device-title { font-size: 14px; font-weight: 700; color: #333; }
     .device-desc  { font-size: 12px; color: #888; line-height: 1.55; }
 
-    /* Step 2: 연령대 - 6-column */
-    .age-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+    /* Step 2: 연령대 - 3-column */
+    .age-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .age-btn {
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      padding: 14px 6px;
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 20px 10px;
       background: #f8f9fb; border: 2px solid #e8eaf0; border-radius: 14px;
       cursor: pointer; font-family: inherit; text-align: center;
       transition: all .15s;
@@ -126,32 +126,8 @@
       transform: translateY(-3px);
       box-shadow: 0 5px 14px rgba(91,79,207,.13);
     }
-    .age-range { font-size: 15px; font-weight: 800; color: #333; }
-    .age-label  { font-size: 10px; color: #888; line-height: 1.4; }
-
-    /* 연령 그룹 레이블 */
-    .age-group-labels {
-      display: grid;
-      grid-template-columns: 3fr 2fr 1fr;
-      gap: 8px;
-      margin-top: 10px;
-    }
-    .age-group-item {
-      text-align: center;
-      padding-top: 8px;
-      border-top: 2px solid #e0e0e0;
-      font-size: 11px;
-      font-weight: 700;
-      color: #666;
-      line-height: 1.5;
-    }
-    .age-group-item span {
-      display: block;
-      font-size: 10px;
-      font-weight: 400;
-      color: #aaa;
-      margin-top: 2px;
-    }
+    .age-range { font-size: 16px; font-weight: 800; color: #333; }
+    .age-label  { font-size: 11px; color: #888; line-height: 1.45; }
 
     /* Step 3: 과목 선택 - checkbox cards */
     .subj-hint { font-size: 12px; color: #aaa; text-align: center; margin-bottom: 14px; }
@@ -163,7 +139,7 @@
       cursor: pointer; transition: all .15s;
     }
     .subj-card:hover { border-color: #bbb; background: #f4f4f6; }
-    .subj-card.sel-english { border-color: #F0569A; background: #fde8f3; }
+    .subj-card.sel-english { border-color: #5b4fcf; background: #f0eeff; }
     .subj-card.sel-math    { border-color: #3a9de1; background: #e8f4fd; }
     .subj-card.sel-hangul  { border-color: #2bb5a0; background: #e5f8f5; }
 
@@ -173,7 +149,7 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 12px; transition: all .15s;
     }
-    .sel-english .subj-chk { background: #F0569A; border-color: #F0569A; color: #fff; }
+    .sel-english .subj-chk { background: #5b4fcf; border-color: #5b4fcf; color: #fff; }
     .sel-math    .subj-chk { background: #3a9de1; border-color: #3a9de1; color: #fff; }
     .sel-hangul  .subj-chk { background: #2bb5a0; border-color: #2bb5a0; color: #fff; }
 
@@ -323,7 +299,7 @@
     .th-child  { background: #555; text-align: center; width: 80px; }
     .th-period { background: #666; width: 76px; }
     .th-item   { background: #777; width: 110px; text-align: left; }
-    .th-english { background: #F0569A; }
+    .th-english { background: #5b4fcf; }
     .th-math    { background: #3a9de1; }
     .th-hangul  { background: #2bb5a0; }
 
@@ -339,7 +315,7 @@
     .td-welcome  { font-weight: 700; color: #c0392b; }
     .td-monthly  { font-weight: 800; color: #2c7be5; font-size: 14px; }
     .td-empty    { color: #ddd; font-size: 12px; }
-    .col-english { border-right: 1px solid #fad0e8; }
+    .col-english { border-right: 1px solid #e8e4f9; }
     .col-math    { border-right: 1px solid #daeef9; }
 
     tr.row-monthly td { background: #f7fbff; }
@@ -377,7 +353,6 @@
       .td-item { padding-left: 8px; }
       .page-title h1 { font-size: 22px; }
       .age-grid { grid-template-columns: repeat(3,1fr); }
-      .age-group-labels { grid-template-columns: 3fr 2fr 1fr; }
     }
   </style>
 </head>
@@ -442,29 +417,18 @@
             <span class="q-badge">Step 2</span> 우리 아이는 올해 몇 살인가요?
           </div>
           <div class="age-grid">
-            <button class="age-btn" onclick="handleAge('3')">
-              <span class="age-range">3세</span>
+            <button class="age-btn" onclick="handleAge('4-5')">
+              <span class="age-range">4~5세</span>
+              <span class="age-label">기초<br>다지기</span>
             </button>
-            <button class="age-btn" onclick="handleAge('4')">
-              <span class="age-range">4세</span>
-            </button>
-            <button class="age-btn" onclick="handleAge('5')">
-              <span class="age-range">5세</span>
-            </button>
-            <button class="age-btn" onclick="handleAge('6')">
-              <span class="age-range">6세</span>
-            </button>
-            <button class="age-btn" onclick="handleAge('7')">
-              <span class="age-range">7세</span>
+            <button class="age-btn" onclick="handleAge('6-7')">
+              <span class="age-range">6~7세</span>
+              <span class="age-label">취학 전<br>집중 학습</span>
             </button>
             <button class="age-btn" onclick="handleAge('8+')">
-              <span class="age-range">8세<br>이상</span>
+              <span class="age-range">8세 이상</span>
+              <span class="age-label">초등 저학년<br>보충</span>
             </button>
-          </div>
-          <div class="age-group-labels">
-            <div class="age-group-item">3~5세<span>기초다지기</span></div>
-            <div class="age-group-item">6~7세<span>취학 전 집중 학습</span></div>
-            <div class="age-group-item">8세 이상<span>초등 저학년 보충</span></div>
           </div>
         </div>
 
@@ -481,7 +445,7 @@
                 <div class="subj-name">토도영어</div>
                 <div class="subj-desc">모국어처럼 습득하는 즐거운 영어</div>
               </div>
-              <span class="subj-badge" style="background:#F0569A;">영어</span>
+              <span class="subj-badge" style="background:#5b4fcf;">영어</span>
             </div>
             <div class="subj-card" id="sc-math" onclick="toggleSubj('math')">
               <div class="subj-chk" id="chk-math"></div>
@@ -705,7 +669,7 @@
     /* ── 가격 데이터 ── */
     const DATA = {
       english: {
-        name: '토도영어', color: '#F0569A', light: '#fde8f3',
+        name: '토도영어', color: '#5b4fcf', light: '#f0eeff',
         hasSix: true,
         p: {
           1: {
@@ -750,11 +714,8 @@
 
     /* ── 연령대별 기본 과목 ── */
     const AGE_DEFAULTS = {
-      '3':   ['hangul', 'math'],
-      '4':   ['hangul', 'math'],
-      '5':   ['hangul', 'math'],
-      '6':   ['hangul', 'math', 'english'],
-      '7':   ['hangul', 'math', 'english'],
+      '4-5': ['hangul', 'math'],
+      '6-7': ['hangul', 'math', 'english'],
       '8+':  ['english', 'math']
     };
 
@@ -856,7 +817,7 @@
 
     /* ── 과목 결과 렌더 ── */
     function renderSubjectResult() {
-      const ageLabel = { '3': '3세', '4': '4세', '5': '5세', '6': '6세', '7': '7세', '8+': '8세 이상' }[wiz.ageGroup];
+      const ageLabel = { '4-5': '4~5세', '6-7': '6~7세', '8+': '8세 이상' }[wiz.ageGroup];
 
       let html = `
         <div style="text-align:center; margin-bottom:16px;">
