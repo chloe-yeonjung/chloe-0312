@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>토도 멤버십 플랜 비교표</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+      background: #f4f6fb;
+      padding: 40px 20px 60px;
+      color: #222;
+    }
+
+    .page-title { text-align: center; margin-bottom: 36px; }
+    .page-title h1 { font-size: 28px; font-weight: 800; color: #1a1a2e; }
+    .page-title p  { font-size: 14px; color: #888; margin-top: 6px; }
+
+    /* ═══════════════════════════
+       WIZARD
+    ═══════════════════════════ */
+    .wizard-wrap { max-width: 680px; margin: 0 auto 48px; }
+
+    .wizard-card {
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 6px 28px rgba(0,0,0,0.10);
+    }
+
+    /* Header */
+    .wizard-header {
+      background: linear-gradient(135deg, #5b4fcf 0%, #3a9de1 100%);
+      padding: 30px 28px 26px;
+      text-align: center;
+      color: #fff;
+    }
+    .wiz-emoji { font-size: 34px; margin-bottom: 10px; }
+    .wizard-header h2 { font-size: 20px; font-weight: 800; line-height: 1.4; }
+    .wiz-subtitle { font-size: 13px; opacity: 0.88; margin-top: 8px; line-height: 1.65; }
+    .wiz-time {
+      display: inline-block;
+      margin-top: 10px;
+      background: rgba(255,255,255,0.22);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* Step dots */
+    .step-dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 32px 4px;
+    }
+    .sdot {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      color: #aaa;
+      font-size: 11px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background .3s, color .3s;
+    }
+    .sdot.active { background: #5b4fcf; color: #fff; }
+    .sdot.done   { background: #5b4fcf; color: #fff; }
+    .sline { flex: 1; max-width: 80px; height: 2px; background: #e0e0e0; transition: background .3s; }
+    .sline.done { background: #5b4fcf; }
+
+    /* Step body */
+    .wizard-body { padding: 24px 24px 30px; }
+    .step-pane { display: none; }
+    .step-pane.active { display: block; animation: fadeSlide .25s ease; }
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .step-q {
+      font-size: 15px; font-weight: 700; color: #222;
+      text-align: center; margin-bottom: 20px; line-height: 1.5;
+    }
+    .q-badge {
+      display: inline-block;
+      background: #5b4fcf; color: #fff;
+      font-size: 10px; font-weight: 800;
+      padding: 2px 9px; border-radius: 10px;
+      margin-right: 5px; vertical-align: middle;
+    }
+
+    /* Step 1: 기기 선택 - stacked cards */
+    .device-grid { display: flex; flex-direction: column; gap: 10px; }
+    .device-btn {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 16px 18px;
+      background: #f8f9fb; border: 2px solid #e8eaf0; border-radius: 14px;
+      cursor: pointer; font-family: inherit; text-align: left;
+      transition: all .15s;
+    }
+    .device-btn:hover {
+      border-color: #5b4fcf; background: #f0eeff;
+      transform: translateX(3px);
+      box-shadow: 0 4px 14px rgba(91,79,207,.10);
+    }
+    .device-icon { font-size: 26px; flex-shrink: 0; margin-top: 1px; }
+    .device-info { display: flex; flex-direction: column; gap: 3px; }
+    .device-title { font-size: 14px; font-weight: 700; color: #333; }
+    .device-desc  { font-size: 12px; color: #888; line-height: 1.55; }
+
+    /* Step 2: 연령대 - 6-column */
+    .age-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+    .age-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 14px 6px;
+      background: #f8f9fb; border: 2px solid #e8eaf0; border-radius: 14px;
+      cursor: pointer; font-family: inherit; text-align: center;
+      transition: all .15s;
+    }
+    .age-btn:hover {
+      border-color: #5b4fcf; background: #f0eeff;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 14px rgba(91,79,207,.13);
+    }
+    .age-range { font-size: 15px; font-weight: 800; color: #333; }
+    .age-label  { font-size: 10px; color: #888; line-height: 1.4; }
+
+    /* 연령 그룹 레이블 */
+    .age-group-labels {
+      display: grid;
+      grid-template-columns: 3fr 2fr 1fr;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .age-group-item {
+      text-align: center;
+      padding-top: 8px;
+      border-top: 2px solid #e0e0e0;
+      font-size: 11px;
+      font-weight: 700;
+      color: #666;
+      line-height: 1.5;
+    }
+    .age-group-item span {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      color: #aaa;
+      margin-top: 2px;
+    }
+
+    /* Step 3: 과목 선택 - checkbox cards */
+    .subj-hint { font-size: 12px; color: #aaa; text-align: center; margin-bottom: 14px; }
+    .subj-grid { display: flex; flex-direction: column; gap: 9px; margin-bottom: 16px; }
+    .subj-card {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px;
+      background: #f8f9fb; border: 2px solid #e8eaf0; border-radius: 14px;
+      cursor: pointer; transition: all .15s;
+    }
+    .subj-card:hover { border-color: #bbb; background: #f4f4f6; }
+    .subj-card.sel-english { border-color: #F0569A; background: #fde8f3; }
+    .subj-card.sel-math    { border-color: #3a9de1; background: #e8f4fd; }
+    .subj-card.sel-hangul  { border-color: #2bb5a0; background: #e5f8f5; }
+
+    .subj-chk {
+      width: 22px; height: 22px; border-radius: 50%;
+      border: 2px solid #ddd; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; transition: all .15s;
+    }
+    .sel-english .subj-chk { background: #F0569A; border-color: #F0569A; color: #fff; }
+    .sel-math    .subj-chk { background: #3a9de1; border-color: #3a9de1; color: #fff; }
+    .sel-hangul  .subj-chk { background: #2bb5a0; border-color: #2bb5a0; color: #fff; }
+
+    .subj-info { flex: 1; }
+    .subj-name { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 2px; }
+    .subj-desc { font-size: 12px; color: #888; }
+
+    .subj-badge {
+      font-size: 10px; font-weight: 700; color: #fff;
+      padding: 2px 8px; border-radius: 10px;
+      flex-shrink: 0;
+    }
+
+    .confirm-btn {
+      width: 100%; padding: 13px;
+      background: #5b4fcf; color: #fff;
+      border: none; border-radius: 12px;
+      font-size: 15px; font-weight: 700;
+      cursor: pointer; font-family: inherit;
+      transition: background .15s, opacity .15s;
+    }
+    .confirm-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .confirm-btn:not(:disabled):hover { background: #4a3fb8; }
+
+    /* Result ── children toggle */
+    .child-toggle {
+      display: flex; margin-bottom: 16px;
+      border: 2px solid #e8eaf0; border-radius: 10px; overflow: hidden;
+    }
+    .ctoggle-btn {
+      flex: 1; padding: 10px;
+      font-size: 13px; font-weight: 700;
+      background: #f8f9fb; border: none;
+      cursor: pointer; font-family: inherit; color: #999;
+      transition: all .15s;
+    }
+    .ctoggle-btn.on { background: #5b4fcf; color: #fff; }
+
+    /* Result ── subject card */
+    .src-card {
+      border: 2px solid #eee; border-radius: 14px;
+      overflow: hidden; margin-bottom: 12px;
+    }
+    .src-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; color: #fff;
+    }
+    .src-name   { font-size: 15px; font-weight: 800; }
+    .src-badge  {
+      font-size: 11px; font-weight: 700;
+      background: rgba(255,255,255,0.25);
+      padding: 3px 10px; border-radius: 20px;
+    }
+
+    /* Duration mini-toggle */
+    .dur-toggle {
+      display: flex;
+      margin: 12px 16px 0;
+      border: 1.5px solid #e8eaf0; border-radius: 8px; overflow: hidden;
+    }
+    .dur-btn {
+      flex: 1; padding: 7px;
+      font-size: 12px; font-weight: 700;
+      background: #f8f9fb; border: none;
+      cursor: pointer; font-family: inherit; color: #aaa;
+      transition: all .15s;
+    }
+    .dur-btn.on { color: #fff; }
+
+    /* Price rows */
+    .src-prices { padding: 10px 16px 14px; }
+    .src-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 7px 0; font-size: 13px;
+      border-bottom: 1px solid #f4f4f4;
+    }
+    .src-row:last-child { border-bottom: none; }
+    .src-lbl  { color: #888; }
+    .src-val  { font-weight: 600; color: #333; }
+    .src-val.strike  { text-decoration: line-through; color: #ccc; font-weight: 400; font-size: 12px; }
+    .src-val.coupon  { color: #c0392b; font-weight: 700; }
+    .src-val.monthly { color: #2c7be5; font-weight: 800; font-size: 16px; }
+
+    .monthly-bg td, .monthly-bg { background: #f0f6ff !important; }
+
+    /* Also-recommend divider */
+    .also-sep {
+      font-size: 12px; font-weight: 700; color: #bbb;
+      text-align: center; margin: 16px 0 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .also-sep::before, .also-sep::after { content:''; flex:1; height:1px; background:#eee; }
+
+    /* Won result table */
+    .won-rt { width: 100%; border-collapse: collapse; }
+    .won-rt th {
+      background: #E05A42; color: #fff;
+      padding: 10px 14px; font-size: 12px; font-weight: 700;
+      text-align: center;
+    }
+    .won-rt th:first-child { background: #c44a33; text-align: left; }
+    .won-rt td { padding: 11px 14px; font-size: 13px; text-align: center; border-bottom: 1px solid #f0f0f0; }
+    .won-rt tr:last-child td { border-bottom: none; }
+    .won-rt .wp { text-align: left; font-weight: 700; }
+    .won-rt .wo { color: #bbb; text-decoration: line-through; font-size: 12px; }
+    .won-rt .wm { font-weight: 600; }
+    .won-rt .wly { color: #2c7be5; font-weight: 800; }
+    .won-best-tag {
+      display: inline-block; background: #f5c518; color: #333;
+      font-size: 10px; font-weight: 800;
+      padding: 1px 6px; border-radius: 4px; margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    /* Reset */
+    .reset-btn {
+      width: 100%; margin-top: 16px; padding: 11px;
+      background: #f4f5f8; border: none; border-radius: 10px;
+      font-size: 13px; font-weight: 600; color: #666;
+      cursor: pointer; font-family: inherit; transition: background .15s;
+    }
+    .reset-btn:hover { background: #e8eaf0; }
+
+    /* ═══════════════════════════
+       COMPARISON TABLE
+    ═══════════════════════════ */
+    .section { margin-top: 40px; }
+    .section-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .section-badge {
+      display: inline-block; padding: 5px 16px;
+      border-radius: 20px; font-size: 18px; font-weight: 800; color: #fff;
+    }
+    .badge-compare { background: #444; }
+    .badge-won     { background: #E05A42; }
+    .section-desc  { font-size: 13px; color: #888; }
+
+    .table-wrap {
+      background: #fff; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      padding: 13px 14px; font-size: 13px; font-weight: 700;
+      text-align: center; color: #fff;
+      border-bottom: 2px solid rgba(255,255,255,0.2);
+    }
+    .th-child  { background: #555; text-align: center; width: 80px; }
+    .th-period { background: #666; width: 76px; }
+    .th-item   { background: #777; width: 110px; text-align: left; }
+    .th-english { background: #F0569A; }
+    .th-math    { background: #3a9de1; }
+    .th-hangul  { background: #2bb5a0; }
+
+    tbody tr { border-bottom: 1px solid #f0f0f0; transition: background .12s; }
+    tbody tr:hover { background: #fafbff; }
+
+    td { padding: 11px 14px; font-size: 13px; text-align: center; vertical-align: middle; }
+    .td-child  { font-weight: 700; font-size: 13px; color: #444; background: #f8f9fa; border-right: 1px solid #eee; }
+    .td-period { font-weight: 700; font-size: 13px; color: #555; background: #fafafa; border-right: 1px solid #eee; }
+    .td-item   { text-align: left; font-size: 12px; color: #777; background: #fdfdfd; border-right: 2px solid #eee; padding-left: 16px; }
+    .td-original { color: #bbb; text-decoration: line-through; font-size: 12px; }
+    .td-member   { font-weight: 600; color: #333; }
+    .td-welcome  { font-weight: 700; color: #c0392b; }
+    .td-monthly  { font-weight: 800; color: #2c7be5; font-size: 14px; }
+    .td-empty    { color: #ddd; font-size: 12px; }
+    .col-english { border-right: 1px solid #fad0e8; }
+    .col-math    { border-right: 1px solid #daeef9; }
+
+    tr.row-monthly td { background: #f7fbff; }
+    tr.row-monthly td.td-child,
+    tr.row-monthly td.td-period { background: #eff5ff; }
+    tr.row-monthly td.td-item   { background: #eff5ff; color: #2c7be5; font-weight: 700; }
+    tr.row-monthly td.td-monthly { font-size: 15px; }
+
+    .divider td {
+      background: #eef0f8; padding: 7px 16px;
+      font-size: 12px; font-weight: 700; color: #666;
+      letter-spacing: 0.4px; text-align: left;
+      border-bottom: 1px solid #e0e3f0;
+    }
+    tr.period-sep td { border-top: 2px solid #e8eaf0; }
+
+    .won-table thead th { background: #E05A42; }
+    .won-table th:first-child { background: #c44a33; text-align: left; width: 140px; }
+    .best-tag {
+      display: inline-block; background: #f5c518; color: #333;
+      font-size: 10px; font-weight: 800;
+      border-radius: 4px; padding: 1px 5px; margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    .note-box {
+      margin-top: 32px; background: #fff8e1;
+      border-left: 4px solid #f5c518; border-radius: 8px;
+      padding: 14px 18px; font-size: 13px; color: #666; line-height: 1.7;
+    }
+    .note-box strong { color: #333; }
+
+    @media (max-width: 640px) {
+      td, th { padding: 8px 6px; font-size: 11px; }
+      .td-item { padding-left: 8px; }
+      .page-title h1 { font-size: 22px; }
+      .age-grid { grid-template-columns: repeat(3,1fr); }
+      .age-group-labels { grid-template-columns: 3fr 2fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="page-title">
+    <h1>토도 멤버십 플랜 한눈 비교</h1>
+    <p>처음 가입하시는 고객님을 위한 전 상품 가격 안내</p>
+  </div>
+
+  <!-- ═══════════════════════════════════
+       추천 위자드
+  ═══════════════════════════════════ -->
+  <div class="wizard-wrap">
+    <div class="wizard-card">
+
+      <!-- 헤더 -->
+      <div class="wizard-header">
+        <div class="wiz-emoji">✨</div>
+        <h2>우리 아이를 위한 완벽한 시작,<br>토도가 함께 고민해 드릴게요!</h2>
+        <p class="wiz-subtitle">몇 가지 질문에 답하시면, 아이의 성향과 환경에 딱 맞는<br>학습 플랜을 바로 추천해 드립니다.</p>
+        <span class="wiz-time">⏱ 소요 시간: 약 30초</span>
+      </div>
+
+      <!-- 스텝 닷 -->
+      <div class="step-dots">
+        <div class="sdot active" id="dot-1">1</div>
+        <div class="sline" id="line-1"></div>
+        <div class="sdot" id="dot-2">2</div>
+        <div class="sline" id="line-2"></div>
+        <div class="sdot" id="dot-3">3</div>
+      </div>
+
+      <div class="wizard-body">
+
+        <!-- Step 1: 기기 -->
+        <div class="step-pane active" id="step-device">
+          <div class="step-q">
+            <span class="q-badge">Step 1</span> 학습에 사용할 기기가 준비되어 있나요?
+          </div>
+          <div class="device-grid">
+            <button class="device-btn" onclick="handleDevice('app')">
+              <span class="device-icon">📱</span>
+              <span class="device-info">
+                <span class="device-title">이미 가지고 있는 태블릿이 있어요.</span>
+                <span class="device-desc">보유하신 기기로 언제 어디서나 '토도 앱'을 이용할 수 있습니다.</span>
+              </span>
+            </button>
+            <button class="device-btn" onclick="handleDevice('won')">
+              <span class="device-icon">📦</span>
+              <span class="device-info">
+                <span class="device-title">학습 전용 패드가 필요해요.</span>
+                <span class="device-desc">학습에만 몰입할 수 있는 전용 패드가 포함된 '토도원(Todo One)' 패키지를 추천합니다.</span>
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Step 2: 연령대 -->
+        <div class="step-pane" id="step-age">
+          <div class="step-q">
+            <span class="q-badge">Step 2</span> 우리 아이는 올해 몇 살인가요?
+          </div>
+          <div class="age-grid">
+            <button class="age-btn" onclick="handleAge('3')">
+              <span class="age-range">3세</span>
+            </button>
+            <button class="age-btn" onclick="handleAge('4')">
+              <span class="age-range">4세</span>
+            </button>
+            <button class="age-btn" onclick="handleAge('5')">
+              <span class="age-range">5세</span>
+            </button>
+            <button class="age-btn" onclick="handleAge('6')">
+              <span class="age-range">6세</span>
+            </button>
+            <button class="age-btn" onclick="handleAge('7')">
+              <span class="age-range">7세</span>
+            </button>
+            <button class="age-btn" onclick="handleAge('8+')">
+              <span class="age-range">8세<br>이상</span>
+            </button>
+          </div>
+          <div class="age-group-labels">
+            <div class="age-group-item">3~5세<span>기초다지기</span></div>
+            <div class="age-group-item">6~7세<span>취학 전 집중 학습</span></div>
+            <div class="age-group-item">8세 이상<span>초등 저학년 보충</span></div>
+          </div>
+        </div>
+
+        <!-- Step 3: 과목 선택 (중복 선택 가능) -->
+        <div class="step-pane" id="step-subject">
+          <div class="step-q">
+            <span class="q-badge">Step 3</span> 가장 먼저 시작하고 싶은 과목은 무엇인가요?
+          </div>
+          <p class="subj-hint">중복 선택 가능</p>
+          <div class="subj-grid">
+            <div class="subj-card" id="sc-english" onclick="toggleSubj('english')">
+              <div class="subj-chk" id="chk-english"></div>
+              <div class="subj-info">
+                <div class="subj-name">토도영어</div>
+                <div class="subj-desc">모국어처럼 습득하는 즐거운 영어</div>
+              </div>
+              <span class="subj-badge" style="background:#F0569A;">영어</span>
+            </div>
+            <div class="subj-card" id="sc-math" onclick="toggleSubj('math')">
+              <div class="subj-chk" id="chk-math"></div>
+              <div class="subj-info">
+                <div class="subj-name">토도수학</div>
+                <div class="subj-desc">원리와 개념을 깨치는 사고력 수학</div>
+              </div>
+              <span class="subj-badge" style="background:#3a9de1;">수학</span>
+            </div>
+            <div class="subj-card" id="sc-hangul" onclick="toggleSubj('hangul')">
+              <div class="subj-chk" id="chk-hangul"></div>
+              <div class="subj-info">
+                <div class="subj-name">토도한글</div>
+                <div class="subj-desc">눈에 쏙 들어오는 체계적인 한글 원리</div>
+              </div>
+              <span class="subj-badge" style="background:#2bb5a0;">한글</span>
+            </div>
+          </div>
+          <button class="confirm-btn" id="confirm-btn" disabled onclick="showResult()">
+            추천 플랜 보기 →
+          </button>
+        </div>
+
+        <!-- 결과 -->
+        <div class="step-pane" id="step-result">
+          <div id="result-inner"></div>
+          <button class="reset-btn" onclick="resetWizard()">↩ 처음부터 다시 선택하기</button>
+        </div>
+
+      </div><!-- /wizard-body -->
+    </div><!-- /wizard-card -->
+  </div><!-- /wizard-wrap -->
+
+
+  <!-- ═══════════════════════════════════
+       과목별 비교표
+  ═══════════════════════════════════ -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-badge badge-compare">과목별 멤버십 비교</span>
+      <span class="section-desc">영어 · 수학 · 한글 학습 무제한 + 카카오톡 학습 알림 · 일시불 상품</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="th-child">자녀 수</th>
+            <th class="th-period">기간</th>
+            <th class="th-item">항목</th>
+            <th class="th-english col-english">토도영어</th>
+            <th class="th-math col-math">토도수학</th>
+            <th class="th-hangul">토도한글</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="divider"><td colspan="6">👧 한 자녀</td></tr>
+          <tr>
+            <td class="td-child" rowspan="8">한 자녀</td>
+            <td class="td-period" rowspan="4">6개월</td>
+            <td class="td-item">정가</td>
+            <td class="td-original col-english">352,500원</td>
+            <td class="td-empty col-math">—</td>
+            <td class="td-original">174,000원</td>
+          </tr>
+          <tr>
+            <td class="td-item">멤버십 할인가</td>
+            <td class="td-member col-english">299,000원</td>
+            <td class="td-empty col-math">—</td>
+            <td class="td-member">147,500원</td>
+          </tr>
+          <tr>
+            <td class="td-item">웰컴쿠폰 적용가</td>
+            <td class="td-empty col-english">—</td>
+            <td class="td-empty col-math">—</td>
+            <td class="td-empty">—</td>
+          </tr>
+          <tr class="row-monthly">
+            <td class="td-item">월 환산가</td>
+            <td class="td-monthly col-english">49,833원</td>
+            <td class="td-empty col-math">—</td>
+            <td class="td-monthly">24,583원</td>
+          </tr>
+          <tr class="period-sep">
+            <td class="td-period" rowspan="4">12개월</td>
+            <td class="td-item">정가</td>
+            <td class="td-original col-english">705,000원</td>
+            <td class="td-original col-math">180,000원</td>
+            <td class="td-original">348,000원</td>
+          </tr>
+          <tr>
+            <td class="td-item">멤버십 할인가</td>
+            <td class="td-member col-english">528,000원</td>
+            <td class="td-member col-math">139,000원</td>
+            <td class="td-member">261,000원</td>
+          </tr>
+          <tr>
+            <td class="td-item">웰컴쿠폰 적용가 <small>(30%)</small></td>
+            <td class="td-welcome col-english">493,500원</td>
+            <td class="td-welcome col-math">126,000원</td>
+            <td class="td-welcome">243,600원</td>
+          </tr>
+          <tr class="row-monthly">
+            <td class="td-item">월 환산가</td>
+            <td class="td-monthly col-english">41,125원</td>
+            <td class="td-monthly col-math">10,500원</td>
+            <td class="td-monthly">20,300원</td>
+          </tr>
+
+          <tr class="divider"><td colspan="6">👧👦 두 자녀</td></tr>
+          <tr>
+            <td class="td-child" rowspan="8">두 자녀</td>
+            <td class="td-period" rowspan="4">6개월</td>
+            <td class="td-item">정가</td>
+            <td class="td-original col-english">705,000원</td>
+            <td class="td-empty col-math">—</td>
+            <td class="td-original">348,000원</td>
+          </tr>
+          <tr>
+            <td class="td-item">멤버십 할인가</td>
+            <td class="td-member col-english">528,000원</td>
+            <td class="td-empty col-math">—</td>
+            <td class="td-member">261,000원</td>
+          </tr>
+          <tr>
+            <td class="td-item">웰컴쿠폰 적용가</td>
+            <td class="td-empty col-english">—</td>
+            <td class="td-empty col-math">—</td>
+            <td class="td-empty">—</td>
+          </tr>
+          <tr class="row-monthly">
+            <td class="td-item">월 환산가 <small>(자녀당)</small></td>
+            <td class="td-monthly col-english">44,000원</td>
+            <td class="td-empty col-math">—</td>
+            <td class="td-monthly">21,750원</td>
+          </tr>
+          <tr class="period-sep">
+            <td class="td-period" rowspan="4">12개월</td>
+            <td class="td-item">정가</td>
+            <td class="td-original col-english">1,410,000원</td>
+            <td class="td-original col-math">360,000원</td>
+            <td class="td-original">696,000원</td>
+          </tr>
+          <tr>
+            <td class="td-item">멤버십 할인가</td>
+            <td class="td-member col-english">916,000원</td>
+            <td class="td-member col-math">249,000원</td>
+            <td class="td-member">452,000원</td>
+          </tr>
+          <tr>
+            <td class="td-item">웰컴쿠폰 적용가 <small>(40%)</small></td>
+            <td class="td-welcome col-english">846,000원</td>
+            <td class="td-welcome col-math">216,000원</td>
+            <td class="td-welcome">417,600원</td>
+          </tr>
+          <tr class="row-monthly">
+            <td class="td-item">월 환산가 <small>(자녀당)</small></td>
+            <td class="td-monthly col-english">35,250원</td>
+            <td class="td-monthly col-math">9,000원</td>
+            <td class="td-monthly">17,400원</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 토도원 -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-badge badge-won">토도원</span>
+      <span class="section-desc">토도원 전용 패드 포함 · 완벽한 토도원 학습 경험</span>
+    </div>
+    <div class="table-wrap">
+      <table class="won-table">
+        <thead>
+          <tr>
+            <th>플랜</th>
+            <th>정가</th>
+            <th>멤버십 할인가</th>
+            <th style="background:#2c7be5;">월 환산가</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="td-child" style="text-align:left; background:#f8f9fa;">12개월</td>
+            <td class="td-original">1,276,000원</td>
+            <td class="td-member">1,196,000원</td>
+            <td class="td-monthly">월 99,000원</td>
+          </tr>
+          <tr>
+            <td class="td-child" style="text-align:left; background:#f8f9fa;">18개월 <span class="best-tag">BEST</span></td>
+            <td class="td-original">1,600,000원</td>
+            <td class="td-member">1,490,000원</td>
+            <td class="td-monthly">월 82,000원</td>
+          </tr>
+          <tr>
+            <td class="td-child" style="text-align:left; background:#f8f9fa;">24개월</td>
+            <td class="td-original">2,090,000원</td>
+            <td class="td-member">1,820,000원</td>
+            <td class="td-monthly">월 75,000원</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="note-box">
+    <strong>📌 안내사항</strong><br>
+    · 웰컴쿠폰은 <strong>처음 가입하시는 신규 고객</strong>에게만 적용됩니다.<br>
+    · 토도영어·토도수학·토도한글은 모두 <strong>기간 일시불</strong> 상품입니다.<br>
+    · 두 자녀 상품의 월 환산가는 <strong>자녀 1인당 기준</strong>입니다.<br>
+    · 토도수학 6개월 상품 정보는 현재 미제공입니다.<br>
+    · 토도원은 전용 패드가 포함된 별도 상품으로, 자녀 수 구분 없이 적용됩니다.<br>
+    · 가격 및 할인율은 변경될 수 있으니 최신 정보는 앱에서 확인해 주세요.
+  </div>
+
+
+  <!-- ═══════════════════════════════════
+       WIZARD SCRIPT
+  ═══════════════════════════════════ -->
+  <script>
+    /* ── 가격 데이터 ── */
+    const DATA = {
+      english: {
+        name: '토도영어', color: '#F0569A', light: '#fde8f3',
+        hasSix: true,
+        p: {
+          1: {
+            6:  { original: 352500,  member: 299000, coupon: null,   couponPct: null, monthly: 49833, perChild: false },
+            12: { original: 705000,  member: 528000, coupon: 493500, couponPct: 30,   monthly: 41125, perChild: false }
+          },
+          2: {
+            6:  { original: 705000,  member: 528000, coupon: null,   couponPct: null, monthly: 44000, perChild: true },
+            12: { original: 1410000, member: 916000, coupon: 846000, couponPct: 40,   monthly: 35250, perChild: true }
+          }
+        }
+      },
+      math: {
+        name: '토도수학', color: '#3a9de1', light: '#e8f4fd',
+        hasSix: false,
+        p: {
+          1: { 12: { original: 180000, member: 139000, coupon: 126000, couponPct: 30, monthly: 10500, perChild: false } },
+          2: { 12: { original: 360000, member: 249000, coupon: 216000, couponPct: 40, monthly: 9000,  perChild: true  } }
+        }
+      },
+      hangul: {
+        name: '토도한글', color: '#2bb5a0', light: '#e5f8f5',
+        hasSix: true,
+        p: {
+          1: {
+            6:  { original: 174000, member: 147500, coupon: null,   couponPct: null, monthly: 24583, perChild: false },
+            12: { original: 348000, member: 261000, coupon: 243600, couponPct: 30,   monthly: 20300, perChild: false }
+          },
+          2: {
+            6:  { original: 348000, member: 261000, coupon: null,   couponPct: null, monthly: 21750, perChild: true },
+            12: { original: 696000, member: 452000, coupon: 417600, couponPct: 40,   monthly: 17400, perChild: true }
+          }
+        }
+      }
+    };
+
+    const WON = [
+      { months: 12, original: 1276000, member: 1196000, monthly: 99000, best: false },
+      { months: 18, original: 1600000, member: 1490000, monthly: 82000, best: true  },
+      { months: 24, original: 2090000, member: 1820000, monthly: 75000, best: false }
+    ];
+
+    /* ── 연령대별 기본 과목 ── */
+    const AGE_DEFAULTS = {
+      '3':   ['hangul', 'math'],
+      '4':   ['hangul', 'math'],
+      '5':   ['hangul', 'math'],
+      '6':   ['hangul', 'math', 'english'],
+      '7':   ['hangul', 'math', 'english'],
+      '8+':  ['english', 'math']
+    };
+
+    /* ── 위자드 상태 ── */
+    let wiz = {
+      device:   null,
+      ageGroup: null,
+      subjects: [],
+      children: 1,
+      durations: { english: 12, math: 12, hangul: 12 }
+    };
+
+    /* ── 스텝 전환 ── */
+    function showStep(id) {
+      document.querySelectorAll('.step-pane').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      const stepMap = { 'step-device': 1, 'step-age': 2, 'step-subject': 3, 'step-result': 3 };
+      const cur = stepMap[id] || 1;
+      [1, 2, 3].forEach(i => {
+        document.getElementById('dot-' + i).className = i < cur ? 'sdot done' : i === cur ? 'sdot active' : 'sdot';
+        if (i <= 2) document.getElementById('line-' + i).className = i < cur ? 'sline done' : 'sline';
+      });
+    }
+
+    /* ── Step 1 핸들러 ── */
+    function handleDevice(type) {
+      wiz.device = type;
+      if (type === 'won') {
+        showStep('step-result');
+        renderWonResult();
+      } else {
+        showStep('step-age');
+      }
+    }
+
+    /* ── Step 2 핸들러 ── */
+    function handleAge(group) {
+      wiz.ageGroup = group;
+      wiz.subjects = [...AGE_DEFAULTS[group]];
+      showStep('step-subject');
+      // 체크박스 초기화
+      ['english', 'math', 'hangul'].forEach(k => {
+        const card = document.getElementById('sc-' + k);
+        const chk  = document.getElementById('chk-' + k);
+        const on   = wiz.subjects.includes(k);
+        card.className = 'subj-card' + (on ? ' sel-' + k : '');
+        chk.textContent = on ? '✓' : '';
+      });
+      updateConfirmBtn();
+    }
+
+    /* ── Step 3 핸들러 ── */
+    function toggleSubj(key) {
+      const idx = wiz.subjects.indexOf(key);
+      if (idx >= 0) wiz.subjects.splice(idx, 1);
+      else          wiz.subjects.push(key);
+      const on   = wiz.subjects.includes(key);
+      document.getElementById('sc-' + key).className = 'subj-card' + (on ? ' sel-' + key : '');
+      document.getElementById('chk-' + key).textContent = on ? '✓' : '';
+      updateConfirmBtn();
+    }
+
+    function updateConfirmBtn() {
+      document.getElementById('confirm-btn').disabled = wiz.subjects.length === 0;
+    }
+
+    /* ── 결과 표시 ── */
+    function showResult() {
+      showStep('step-result');
+      wiz.children = 1;
+      renderSubjectResult();
+    }
+
+    /* ── 자녀 수 토글 ── */
+    function setChildren(n) {
+      wiz.children = n;
+      document.getElementById('ctoggle-1').classList.toggle('on', n === 1);
+      document.getElementById('ctoggle-2').classList.toggle('on', n === 2);
+      wiz.subjects.forEach(k => refreshCard(k));
+    }
+
+    /* ── 기간 토글 ── */
+    function setDur(key, dur) {
+      wiz.durations[key] = dur;
+      document.getElementById('dur6-'  + key).classList.toggle('on', dur === 6);
+      document.getElementById('dur12-' + key).classList.toggle('on', dur === 12);
+      const info  = DATA[key];
+      document.getElementById('dur6-'  + key).style.background = dur === 6  ? info.color : '';
+      document.getElementById('dur12-' + key).style.background = dur === 12 ? info.color : '';
+      refreshCard(key);
+    }
+
+    /* ── 과목 카드 가격 갱신 ── */
+    function refreshCard(key) {
+      const priceEl = document.getElementById('prices-' + key);
+      if (!priceEl) return;
+      priceEl.innerHTML = buildPrices(key);
+    }
+
+    /* ── 과목 결과 렌더 ── */
+    function renderSubjectResult() {
+      const ageLabel = { '3': '3세', '4': '4세', '5': '5세', '6': '6세', '7': '7세', '8+': '8세 이상' }[wiz.ageGroup];
+
+      let html = `
+        <div style="text-align:center; margin-bottom:16px;">
+          <div style="font-size:12px; color:#aaa; margin-bottom:4px;">연령대: ${ageLabel}</div>
+          <div style="font-size:14px; font-weight:700; color:#444;">선택하신 과목의 추천 플랜이에요!</div>
+        </div>
+        <div class="child-toggle">
+          <button class="ctoggle-btn on" id="ctoggle-1" onclick="setChildren(1)">👧 한 자녀</button>
+          <button class="ctoggle-btn"    id="ctoggle-2" onclick="setChildren(2)">👧👦 두 자녀</button>
+        </div>`;
+
+      wiz.subjects.forEach((key, idx) => {
+        const info = DATA[key];
+        if (idx > 0) html += `<div class="also-sep">함께 추천하는 과목</div>`;
+        const badge = idx === 0 ? '⭐ 추천' : '함께 추천';
+        const headerBg = info.color;
+
+        // 기간 토글 (수학은 12개월만)
+        const hasSix = info.hasSix;
+        const curDur = wiz.durations[key];
+        const durToggle = hasSix ? `
+          <div class="dur-toggle">
+            <button class="dur-btn ${curDur===6?'on':''}" id="dur6-${key}"
+              style="${curDur===6?'background:'+info.color+';color:#fff;':''}"
+              onclick="setDur('${key}',6)">6개월</button>
+            <button class="dur-btn ${curDur===12?'on':''}" id="dur12-${key}"
+              style="${curDur===12?'background:'+info.color+';color:#fff;':''}"
+              onclick="setDur('${key}',12)">12개월</button>
+          </div>` : `
+          <div style="font-size:11px; color:#888; text-align:center; padding:10px 16px 0;">
+            12개월 상품
+          </div>`;
+
+        html += `
+          <div class="src-card" style="border-color:${info.color}55;">
+            <div class="src-header" style="background:${headerBg};">
+              <span class="src-name">${info.name}</span>
+              <span class="src-badge">${badge}</span>
+            </div>
+            ${durToggle}
+            <div class="src-prices" id="prices-${key}">${buildPrices(key)}</div>
+          </div>`;
+      });
+
+      document.getElementById('result-inner').innerHTML = html;
+    }
+
+    function buildPrices(key) {
+      const info  = DATA[key];
+      const dur   = wiz.durations[key];
+      const n     = wiz.children;
+      const price = info.p[n] && info.p[n][dur];
+      if (!price) return `<div style="color:#ccc;font-size:13px;text-align:center;padding:10px 0;">해당 상품 정보가 없습니다</div>`;
+
+      const perChild = price.perChild ? ' <span style="font-size:11px;color:#999;font-weight:400;">(자녀당)</span>' : '';
+      const couponRow = price.coupon ? `
+        <div class="src-row">
+          <span class="src-lbl">웰컴쿠폰 적용가 <span style="color:#c0392b;font-size:11px;">${price.couponPct}%↓</span></span>
+          <span class="src-val coupon">${fmt(price.coupon)}</span>
+        </div>` : '';
+
+      return `
+        <div class="src-row">
+          <span class="src-lbl">정가</span>
+          <span class="src-val strike">${fmt(price.original)}</span>
+        </div>
+        <div class="src-row">
+          <span class="src-lbl">멤버십 할인가</span>
+          <span class="src-val">${fmt(price.member)}</span>
+        </div>
+        ${couponRow}
+        <div class="src-row" style="background:#f0f6ff; margin:0 -16px; padding:7px 16px; border-radius:0 0 12px 12px;">
+          <span class="src-lbl" style="color:#2c7be5;font-weight:700;">월 환산가</span>
+          <span class="src-val monthly">${fmt(price.monthly)}${perChild}</span>
+        </div>`;
+    }
+
+    /* ── 토도원 결과 ── */
+    function renderWonResult() {
+      const rows = WON.map(p => `
+        <tr>
+          <td class="wp">${p.months}개월${p.best ? '<span class="won-best-tag">BEST</span>' : ''}</td>
+          <td class="wo">${fmt(p.original)}</td>
+          <td class="wm">${fmt(p.member)}</td>
+          <td class="wly">월 ${fmt(p.monthly)}</td>
+        </tr>`).join('');
+
+      document.getElementById('result-inner').innerHTML = `
+        <div style="text-align:center; margin-bottom:18px;">
+          <div style="font-size:13px; color:#888; margin-bottom:8px;">추천 상품</div>
+          <span style="background:#E05A42; color:#fff; font-size:18px; font-weight:800;
+                       padding:7px 22px; border-radius:20px; display:inline-block;">토도원 (Todo One)</span>
+          <div style="font-size:13px; color:#777; margin-top:12px; line-height:1.7;">
+            학습에만 몰입할 수 있는 <strong>전용 패드 포함</strong> 패키지!<br>
+            완벽한 토도원 학습 경험을 누려보세요.
+          </div>
+        </div>
+        <div style="border:2px solid #E05A4255; border-radius:14px; overflow:hidden;">
+          <table class="won-rt">
+            <thead>
+              <tr>
+                <th>플랜</th><th>정가</th><th>멤버십 할인가</th>
+                <th style="background:#2c7be5;">월 환산가</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`;
+    }
+
+    /* ── 리셋 ── */
+    function resetWizard() {
+      wiz = { device: null, ageGroup: null, subjects: [], children: 1,
+              durations: { english: 12, math: 12, hangul: 12 } };
+      showStep('step-device');
+    }
+
+    /* ── 포맷 ── */
+    function fmt(n) { return n.toLocaleString('ko-KR') + '원'; }
+  </script>
+
+</body>
+</html>
